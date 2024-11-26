@@ -1,17 +1,17 @@
 import logging
-from functools import lru_cache
 from pathlib import Path
-from typing import Dict
 
 import pytest
-import yaml
+from fastapi import FastAPI
+from httpx import AsyncClient
 from fastapi.testclient import TestClient
 
-from hse_fastapi_autotest.services.finders.app_finder import traverse_and_import
+from .settings import PROJECT_ROOT
+from .services.app_finder import traverse_and_import
 
 logging.basicConfig(level=logging.INFO)
 
-logger = logging.getLogger("fastapi_autotest")
+logger = logging.getLogger(__name__)
 
 
 def pytest_addoption(parser):
@@ -26,17 +26,15 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def test_directory(git_repo):
+def test_directory():
     """Fixture to define the test directory based on the loaded Git repository."""
-    return Path(git_repo.working_dir)
+    return Path(PROJECT_ROOT.parent)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def client(test_directory) -> TestClient:
-    """Fast api test client"""
-    app = traverse_and_import(test_directory)
+    """Async FastAPI test client fixture."""
+    # Dynamically import and initialize the app
+    app: FastAPI = traverse_and_import(test_directory)
     yield TestClient(app)
-
-
-
 
