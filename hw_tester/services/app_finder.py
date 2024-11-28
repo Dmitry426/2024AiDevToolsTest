@@ -49,8 +49,12 @@ def traverse_and_import(directory_path: Path) -> FastAPI:
     """
 
     for root, dirs, files in os.walk(directory_path):
+        if "venv" in dirs:
+            dirs.remove("venv")
+
         if ".venv" in dirs:
             dirs.remove(".venv")
+
         if "tests" in dirs:
             dirs.remove("tests")
 

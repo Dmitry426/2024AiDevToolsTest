@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pytest
 from fastapi import FastAPI
-from httpx import AsyncClient
 from fastapi.testclient import TestClient
 
 from .settings import PROJECT_ROOT
