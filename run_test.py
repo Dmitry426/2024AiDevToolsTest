@@ -27,27 +27,31 @@ def get_args():
     return parser.parse_args()
 
 def run_tests_and_capture_json():
-    args = get_args()
-    path = Path(__file__).resolve().parent / 'hw_tester' / 'tests'
-    if args.group == "base":
-        path = path / 'test_base_api.py'
-    if args.group == "middle":
-        path = path / 'test_middle_api.py'
-    if args.group == "pro":
-        path = path / 'test_pro_api.py'
+    try:
+        args = get_args()
+        path = Path(__file__).resolve().parent / 'hw_tester' / 'tests'
+        if args.group == "base":
+            path = path / 'test_base_api.py'
+        if args.group == "middle":
+            path = path / 'test_middle_api.py'
+        if args.group == "pro":
+            path = path / 'test_pro_api.py'
 
-    result = subprocess.run(
-        ['pytest', '-v',str(path)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
+        result = subprocess.run(
+            ['pytest', '-v',str(path)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
 
-    if result.stderr:
         print(result.stderr)
-        raise Exception('test_not_done')
-    
-    print(result.stdout)
+        print(result.stdout)
+        if result.returncode != 0:
+            raise Exception('Tests failed. Check the output above.')
+
+    except Exception as e:
+        print(f"Error: {e}")
+        exit(1)  
 
 if __name__ == '__main__':
     run_tests_and_capture_json()
