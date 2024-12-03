@@ -37,13 +37,16 @@ def run_tests_and_capture_json():
         path = path / 'test_pro_api.py'
 
     result = subprocess.run(
-        ['pytest', '-s',str(path)],
+        ['pytest', '-v',str(path)],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
     )
 
-    print("Captured Test Output:")
+    if result.stderr:
+        print(result.stderr)
+        raise Exception('test_not_done')
+    
     print(result.stdout)
 
 if __name__ == '__main__':
