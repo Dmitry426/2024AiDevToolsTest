@@ -15,13 +15,15 @@ class TestBaseApi:
         ]
         response = client.post("/fit", json=payload)
         assert response.status_code == HTTPStatus.CREATED
-        assert response.json()["message"]
+        assert isinstance(response.json(),list)
+        assert response.json()[0]["message"]
 
     def test_load_endpoint(self, client):
         payload = {"id": "linear_model_1"}
         response = client.post("/load", json=payload)
         assert response.status_code == HTTPStatus.OK
-        assert response.json()["message"]
+        assert isinstance(response.json(),list)
+        assert response.json()[0]["message"]
 
     def test_predict_endpoint(self, client):
         payload = {
@@ -30,7 +32,7 @@ class TestBaseApi:
         }
         response = client.post("/predict", json=payload)
         assert response.status_code == HTTPStatus.OK
-        json_response = response.json()
+        json_response = response.json()[0]        
         assert json_response["message"] == "Prediction successful"
         assert "linear_model_1" in json_response["data"]
         assert "prediction" in json_response["data"]["linear_model_1"]
@@ -38,7 +40,7 @@ class TestBaseApi:
     def test_list_models_endpoint(self, client):
         response = client.get("/list_models")
         assert response.status_code == HTTPStatus.OK
-        json_response = response.json()
+        json_response = response.json()[0]
         assert json_response["message"] == "List of models"
         assert "models" in json_response["data"]
         assert any(
@@ -48,4 +50,5 @@ class TestBaseApi:
     def test_remove_all_endpoint(self, client):
         response = client.delete("/remove_all")
         assert response.status_code == HTTPStatus.OK
-        assert response.json()["message"]
+        assert isinstance(response.json(),list)
+        assert response.json()[0]["message"]
