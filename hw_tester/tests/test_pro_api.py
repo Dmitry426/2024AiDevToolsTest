@@ -2,7 +2,8 @@ from http import HTTPStatus
 
 
 class TestHwPro:
-    """Test pro hw """
+    """Test pro hw"""
+
     def test_health_endpoint(self, client):
         response = client.get("/")
         assert response.status_code == HTTPStatus.OK
@@ -15,8 +16,8 @@ class TestHwPro:
             "config": {
                 "id": "linear_123",
                 "ml_model_type": "linear",
-                "hyperparameters": {}
-            }
+                "hyperparameters": {},
+            },
         }
         response = client.post("/api/v1/models/fit", json=payload)
         assert response.status_code == HTTPStatus.OK
@@ -34,7 +35,7 @@ class TestHwPro:
         assert response.json()["message"]
 
     def test_predict(self, client):
-        payload = [{'id': 'linear_123', 'X': [[4.0, 5.0]]}]
+        payload = [{"id": "linear_123", "X": [[4.0, 5.0]]}]
         response = client.post("/api/v1/models/predict", json=payload)
         assert response.status_code == HTTPStatus.OK
         result = response.json()

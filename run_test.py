@@ -5,9 +5,7 @@ from pathlib import Path
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description=(
-            "Fast api hw test ."
-        ),
+        description=("Fast api hw test ."),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
@@ -26,32 +24,34 @@ def get_args():
 
     return parser.parse_args()
 
+
 def run_tests_and_capture_json():
     try:
         args = get_args()
-        path = Path(__file__).resolve().parent / 'hw_tester' / 'tests'
+        path = Path(__file__).resolve().parent / "hw_tester" / "tests"
         if args.group == "base":
-            path = path / 'test_base_api.py'
+            path = path / "test_base_api.py"
         if args.group == "middle":
-            path = path / 'test_middle_api.py'
+            path = path / "test_middle_api.py"
         if args.group == "pro":
-            path = path / 'test_pro_api.py'
+            path = path / "test_pro_api.py"
 
         result = subprocess.run(
-            ['pytest', '-v',str(path)],
+            ["pytest", "-v", str(path)],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
 
         print(result.stderr)
         print(result.stdout)
         if result.returncode != 0:
-            raise Exception('Tests failed. Check the output above.')
+            raise Exception("Tests failed. Check the output above.")
 
     except Exception as e:
         print(f"Error: {e}")
-        exit(1)  
+        exit(1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     run_tests_and_capture_json()

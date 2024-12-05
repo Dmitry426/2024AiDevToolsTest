@@ -18,8 +18,8 @@ class TestMLService:
             "config": {
                 "id": "linear_123",
                 "ml_model_type": "linear",
-                "hyperparameters": {"fit_intercept": True}
-            }
+                "hyperparameters": {"fit_intercept": True},
+            },
         }
         response = client.post("/api/v1/models/fit", json=payload)
         assert response.status_code == HTTPStatus.CREATED

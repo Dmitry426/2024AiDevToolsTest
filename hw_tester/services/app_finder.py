@@ -25,21 +25,24 @@ def import_main_module(module_path: str) -> ModuleType:
     current_directory = module_path.parent
 
     for _ in range(4):
-            if str(current_directory) not in sys.path:
-                sys.path.insert(0, str(current_directory))
-                logger.info(f"Added {current_directory} to sys.path")
+        if str(current_directory) not in sys.path:
+            sys.path.insert(0, str(current_directory))
+            logger.info(f"Added {current_directory} to sys.path")
 
-            try:
-                spec = importlib.util.spec_from_file_location("main", str(module_path))
-                if spec and spec.loader:
-                    main_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(main_module)
-                    return main_module
-                else:
-                    raise ImportError(f"Could not load module from path: {module_path}")
-            except ModuleNotFoundError as e:
-                logger.warning(f"ModuleNotFoundError: {e}. Retrying with parent directory...")
-                current_directory = current_directory.parent
+        try:
+            spec = importlib.util.spec_from_file_location("main", str(module_path))
+            if spec and spec.loader:
+                main_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(main_module)
+                return main_module
+            else:
+                raise ImportError(f"Could not load module from path: {module_path}")
+        except ModuleNotFoundError as e:
+            logger.warning(
+                f"ModuleNotFoundError: {e}. Retrying with parent directory..."
+            )
+            current_directory = current_directory.parent
+
 
 # pylint: disable=no-else-return,inconsistent-return-statements
 def traverse_and_import(directory_path: Path) -> FastAPI:
@@ -68,4 +71,3 @@ def traverse_and_import(directory_path: Path) -> FastAPI:
                 else:
                     logger.error(f"No 'app' object found in {module_path}")
                     raise FileExistsError(f"No 'app' object found in {module_path}")
-

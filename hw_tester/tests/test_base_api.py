@@ -3,10 +3,16 @@ from http import HTTPStatus
 
 class TestBaseApi:
     def test_fit_endpoint(self, client):
-        payload = [{
-            "config": {"id": "linear_model_1"},
-            "train_data": {"X": [1.0, 2.0, 3.0], "y": [2.0, 4.0, 6.0]},
-        }]
+        payload = [
+            {
+                "X": [[1.0, 2.0], [3.0, 4.0]],
+                "config": {
+                    "hyperparameters": {"fit_intercept": True},
+                    "id": "linear_123",
+                },
+                "y": [5.0, 6.0],
+            }
+        ]
         response = client.post("/fit", json=payload)
         assert response.status_code == HTTPStatus.CREATED
         assert response.json()["message"]
@@ -35,7 +41,9 @@ class TestBaseApi:
         json_response = response.json()
         assert json_response["message"] == "List of models"
         assert "models" in json_response["data"]
-        assert any(model["id"] == "linear_model_1" for model in json_response["data"]["models"])
+        assert any(
+            model["id"] == "linear_model_1" for model in json_response["data"]["models"]
+        )
 
     def test_remove_all_endpoint(self, client):
         response = client.delete("/remove_all")

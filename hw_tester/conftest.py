@@ -23,7 +23,6 @@ def pytest_addoption(parser):
     )
 
 
-
 @pytest.fixture(scope="session")
 def test_directory():
     """Fixture to define the test directory based on the loaded Git repository."""
@@ -36,4 +35,3 @@ def client(test_directory) -> TestClient:
     # Dynamically import and initialize the app
     app: FastAPI = traverse_and_import(test_directory)
     yield TestClient(app)
-
