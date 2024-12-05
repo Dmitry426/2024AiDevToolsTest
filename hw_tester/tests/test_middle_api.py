@@ -12,7 +12,7 @@ class TestMLService:
 
     def test_fit_model(self, client):
         """Test fitting a model."""
-        payload = {
+        payload = [{
             "X": [[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]],
             "y": [5.0, 7.0, 9.0],
             "config": {
@@ -20,7 +20,7 @@ class TestMLService:
                 "ml_model_type": "linear",
                 "hyperparameters": {"fit_intercept": True},
             },
-        }
+        }]
         response = client.post("/api/v1/models/fit", json=payload)
         assert response.status_code == HTTPStatus.CREATED
         assert response.json()["message"]
