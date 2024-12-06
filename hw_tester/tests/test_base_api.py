@@ -29,7 +29,7 @@ class TestBaseApi:
         payload = [{"id": "linear_model_1", "X": [[4.0, 5.0]]}]
         response = client.post("/predict", json=payload)
         assert response.status_code == HTTPStatus.OK
-        assert isinstance(response.json(),list)     
+        assert isinstance(response.json(),list)    
 
 
     def test_list_models_endpoint(self, client):
