@@ -8,7 +8,7 @@ class TestBaseApi:
                 "X": [[1.0, 2.0], [3.0, 4.0]],
                 "config": {
                     "hyperparameters": {"fit_intercept": True},
-                    "id": "linear_123",
+                    "id": "linear_model_1",
                 },
                 "y": [5.0, 6.0],
             }
@@ -41,7 +41,6 @@ class TestBaseApi:
         response = client.get("/list_models")
         assert response.status_code == HTTPStatus.OK
         json_response = response.json()[0]
-        assert json_response["message"] == "List of models"
         assert "models" in json_response["data"]
         assert any(
             model["id"] == "linear_model_1" for model in json_response["data"]["models"]

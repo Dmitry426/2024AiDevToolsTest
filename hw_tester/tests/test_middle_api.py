@@ -66,6 +66,16 @@ class TestMLService:
 
     def test_remove_all_models(self, client):
         """Test removing all models."""
+        payload = [{
+            "X": [[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]],
+            "y": [5.0, 7.0, 9.0],
+            "config": {
+                "id": "linear_123",
+                "ml_model_type": "linear",
+                "hyperparameters": {"fit_intercept": True},
+            },
+        }]
+        response = client.post("/api/v1/models/fit", json=payload)
         response = client.delete("/api/v1/models/remove_all")
         assert response.status_code == HTTPStatus.OK
         assert isinstance(response.json(),list)
