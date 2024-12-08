@@ -29,7 +29,7 @@ class TestMLService:
         """Test listing all models."""
         response = client.get("/api/v1/models/list_models")
         assert response.status_code == HTTPStatus.OK
-        models = response.json()[0].get("models", [])
+        models = response.json()[0]
         assert isinstance(models, list)
 
     def test_load_model(self, client):
