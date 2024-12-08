@@ -26,7 +26,7 @@ class TestBaseApi:
         assert response.json()[0]["message"]
 
     def test_predict_endpoint(self, client):
-        payload = [{"id": "linear_model_1", "X": [[4.0, 5.0]]}]
+        payload = {"id": "linear_model_1", "X": [[4.0, 5.0]]}
         response = client.post("/predict", json=payload)
         assert response.status_code == HTTPStatus.OK
         assert isinstance(response.json(),list)    
